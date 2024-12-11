@@ -20,7 +20,7 @@ const Navbar = () => {
         <NavLink>Login</NavLink>
       </li>
       <li>
-        <NavLink></NavLink>
+        <NavLink to={"/myApplications"}>My Application</NavLink>
       </li>
       <li>
         <NavLink>Item 1</NavLink>

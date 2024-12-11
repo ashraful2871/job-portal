@@ -3,9 +3,16 @@ import React, { useContext } from "react";
 
 import loginLottie from "../assets/lotty/login.json";
 import AuthContext from "../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import GoogleLogin from "./socialLogin/GoogleLogin";
 
 const SignIn = () => {
   const { signInUser } = useContext(AuthContext);
+
+  const location = useLocation();
+  const from = location.state || "/";
+  const navigate = useNavigate();
+
   const handleLogin = (e) => {
     e.preventDefault();
     const fromData = new FormData(e.target);
@@ -17,6 +24,7 @@ const SignIn = () => {
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
+        navigate(from);
       })
 
       .catch((error) => {
@@ -65,6 +73,7 @@ const SignIn = () => {
               <button className="btn btn-primary">SignIn</button>
             </div>
           </form>
+          <GoogleLogin></GoogleLogin>
         </div>
       </div>
     </div>
