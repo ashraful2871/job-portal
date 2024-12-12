@@ -14,7 +14,6 @@ const HotJobsDetails = () => {
     status,
   } = jobsData;
   console.log(jobsData);
-  //home work
   return (
     <div className="border p-5 mt-12 rounded-lg">
       <h2 className="text-3xl font-bold text-center">Employment Information</h2>
