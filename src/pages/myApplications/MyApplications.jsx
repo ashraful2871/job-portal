@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../customHooks/UseAuth";
-import { useNavigate } from "react-router-dom";
+import { FaTrashRestore } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const MyApplications = () => {
   const { user } = useAuth();
-  const [jobs, setJobs] = useState();
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:5000/job-application?email=${user?.email}`)
@@ -13,6 +14,35 @@ const MyApplications = () => {
         setJobs(data);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/jobs/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        const remainingApplication = jobs.filter((j) => j._id !== id);
+        setJobs(remainingApplication);
+      }
+    });
+  };
   return (
     <div>
       <h2 className="text-2xl">My Application: {jobs?.length}</h2>
@@ -35,8 +65,8 @@ const MyApplications = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {jobs?.map((job, idx) => (
-              <tr key={idx}>
+            {jobs.map((job, idx) => (
+              <tr key={idx} className="hover">
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
@@ -67,8 +97,11 @@ const MyApplications = () => {
                 </td>
                 <td>Purple</td>
                 <th>
-                  <button className="btn btn-ghost btn-xs">
-                    delete hone work
+                  <button
+                    onClick={() => handleDelete(job._id)}
+                    className="btn btn-ghost text-xl text-red-600"
+                  >
+                    <FaTrashRestore />
                   </button>
                 </th>
               </tr>
