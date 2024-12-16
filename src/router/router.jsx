@@ -35,7 +35,7 @@ const router = createBrowserRouter([
           </PrivetRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/jobs/${params.id}`),
+          fetch(`https://job-portal-ebon-zeta.vercel.app/jobs/${params.id}`),
       },
       {
         path: "/jobApply/:id",
@@ -77,7 +77,9 @@ const router = createBrowserRouter([
           </PrivetRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/job-applications/jobs/${params.job_id}`),
+          fetch(
+            `https://job-portal-ebon-zeta.vercel.app/job-applications/jobs/${params.job_id}`
+          ),
       },
     ],
   },

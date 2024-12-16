@@ -9,6 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
+import axios from "axios";
 
 const AuthProvider = ({ children }) => {
   const provider = new GoogleAuthProvider();
@@ -41,8 +42,32 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log(currentUser);
-      setLoading(false);
+      console.log(currentUser?.email);
+      if (currentUser?.email) {
+        const user = { email: currentUser?.email };
+
+        axios
+          .post("https://job-portal-ebon-zeta.vercel.app/jwt", user, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            console.log("login", res.data);
+            setLoading(false);
+          });
+      } else {
+        axios
+          .post(
+            "https://job-portal-ebon-zeta.vercel.app/logout",
+            {},
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            console.log("logout", res.data);
+            setLoading(false);
+          });
+      }
     });
 
     () => {

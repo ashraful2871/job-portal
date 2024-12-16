@@ -3,23 +3,29 @@ import useAuth from "../../customHooks/UseAuth";
 import { FaTrashRestore } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
+import useAxiosSecure from "../../customHooks/useAxiosSecure";
 
 const MyApplications = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    // fetch(`http://localhost:5000/job-application?email=${user?.email}`)
+    // fetch(`https://job-portal-ebon-zeta.vercel.app/job-application?email=${user?.email}`)
     //   .then((res) => res.json())
     //   .then((data) => {
     //     setJobs(data);
     //   });
-
-    axios
-      .get(`http://localhost:5000/job-application?email=${user?.email}`, {
-        withCredentials: true,
-      })
-      .then((res) => setJobs(res.data));
+    // axios
+    //   .get(`https://job-portal-ebon-zeta.vercel.app/job-application?email=${user?.email}`, {
+    //     withCredentials: true,
+    //   })
+    //   .then((res) => {
+    //     setJobs(res.data);
+    //   });
+    axiosSecure.get(`/job-application?email=${user?.email}`).then((res) => {
+      setJobs(res.data);
+    });
   }, []);
 
   const handleDelete = (id) => {
@@ -33,7 +39,7 @@ const MyApplications = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/jobs/${id}`, {
+        fetch(`https://job-portal-ebon-zeta.vercel.app/jobs/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
